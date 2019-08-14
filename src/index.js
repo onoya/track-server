@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
+const requireAuth = require('./middlewares/requireAuth');
 
 const app = express();
 
@@ -22,8 +23,8 @@ mongoose.connection.on('error', err => {
   console.log('Error connecting to mongo instance', err);
 });
 
-app.get('/', (req, res) => {
-  res.send('hi there');
+app.get('/', requireAuth, (req, res) => {
+  res.send(req.user.email);
 });
 
 app.listen(4555, () => console.log('Listening on port 4555'));
